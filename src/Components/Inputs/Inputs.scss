@@ -1,0 +1,76 @@
+
+
+.field {
+    position: relative;
+    width: 100%;
+    @media (max-width: 480px) {
+        flex-shrink: 0;
+    }
+
+    &__input {
+        position: relative;
+        display: flex;
+        height: 100%;
+        width: 100%;
+        border: 1px solid #6C63FF;
+        border-radius: 5px;
+        padding: 0 12px;
+        background-color: $white;
+        font-family: Inter;
+        font-weight: 500;
+        font-size: 16px;
+        color: $purple;
+        height: 40px;
+        outline: 3px solid transparent;
+        transition: outline ease 0.2s, border ease-in-out 0.2s, color ease-in-out 0.2s, background-color ease-in-out 0.2s;
+
+        &::placeholder {
+            color: #C3C1E5;
+            transition: color ease-in-out 0.2s;
+        }
+
+        &:focus {
+            outline: 3px solid #6C63FF66;
+        }
+
+        &_p {
+            padding: 0 16px;
+        }
+    }
+
+    &__button {
+        background-color: transparent;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right:12px;
+        width: 21px;
+        height: 21px;
+
+        path {
+            transition: fill ease-in-out 0.2s;
+        }
+    }
+}
+
+.cross-icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: auto;
+    right: 12px;
+    width: 22px;
+    cursor: pointer;
+    path {
+        stroke: $purple;
+        transition: fill ease-in-out 0.2s;
+    }
+}
+
+textarea {
+    display: block;
+    resize: vertical;
+    padding: 11px 16px;
+    min-height: 45px;
+    max-height: 210px;
+}
