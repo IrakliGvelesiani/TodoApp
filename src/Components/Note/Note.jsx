@@ -7,13 +7,16 @@ function Note(props) {
   const [isEditing, setIsEditing] = React.useState(false);
   const [editText, setEditText] = React.useState(props.value);
   const [currentText, setCurrentText] = React.useState(props.value);
-
   const [noteHeight, setNoteHeight] = React.useState()
-
   const [rmAnim, setRmAnim] = React.useState(false)
-
+  const [isCheckedNoteInitialized, setIsCheckedNoteInitialized] = React.useState(false);
+  
   const editRef = React.useRef();
   const textRef = React.useRef();
+
+
+
+  
 
   React.useEffect(() => {
     if (isEditing) {
@@ -22,18 +25,22 @@ function Note(props) {
   }, [isEditing]);
 
   React.useEffect(() => {
-    if (props.status === 'complete')  {
+    if (!isCheckedNoteInitialized && props.status === 'complete') {
       setCheckedNote(!checkedNote);
+      setIsCheckedNoteInitialized(true); 
     }
-  }, [])
+  }, [checkedNote, props.status, isCheckedNoteInitialized]);
+  
 
   const handleCheck = () => {
-    setCheckedNote(!checkedNote);
-    props.check(props.index);
-    window.setTimeout(() => {
-      props.refresh();
-    }, 1000)
+    setCheckedNote(prevCheckedNote => !prevCheckedNote, () => {
+      props.check(props.index);
+      window.setTimeout(() => {
+        props.refresh();
+      }, 1000);
+    }); 
   };
+
 
   const handleEdit = () => {
     if (isEditing) {
@@ -79,8 +86,8 @@ function Note(props) {
       setIsEditing(false)
       setEditText(currentText);
     }
-   
-  }, [props.noteEd])
+  }, [props.index, props.noteEd, currentText])
+  
 
 
   const noteParent = React.useRef(null)
