@@ -3,13 +3,12 @@ import editIcon from "../../Assets/Icons/edit-icon.svg";
 import trashIcon from "../../Assets/Icons/trash-icon.svg";
 
 function Note(props) {
-  const [checkedNote, setCheckedNote] = React.useState(false);
+  const [checkedNote, setCheckedNote] = React.useState(props.status === 'complete');
   const [isEditing, setIsEditing] = React.useState(false);
   const [editText, setEditText] = React.useState(props.value);
   const [currentText, setCurrentText] = React.useState(props.value);
   const [noteHeight, setNoteHeight] = React.useState();
   const [rmAnim, setRmAnim] = React.useState(false);
-  const [isCheckedNoteInitialized, setIsCheckedNoteInitialized] = React.useState(false);
 
   const editRef = React.useRef();
   const textRef = React.useRef();
@@ -22,16 +21,14 @@ function Note(props) {
   }, [isEditing]);
 
   React.useEffect(() => {
-    if (!isCheckedNoteInitialized && props.status === 'complete') {
-      setCheckedNote(!checkedNote);
-      setIsCheckedNoteInitialized(true); 
-    }
-  }, [checkedNote, props.status, isCheckedNoteInitialized]);
+    setCheckedNote(props.status === 'complete');
+  }, [props.status]);
 
   const handleCheck = () => {
-    setCheckedNote(prevCheckedNote => !prevCheckedNote);
-    props.check(props.index);
-    window.setTimeout(() => {
+    const newStatus = !checkedNote ? 'complete' : 'incomplete';
+    setCheckedNote(!checkedNote);
+    props.check(props.index, newStatus); 
+    setTimeout(() => {
       props.refresh();
     }, 1000);
   };
