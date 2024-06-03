@@ -28,7 +28,8 @@ function App() {
   const [isEmpty, setIsEmpty] = React.useState(true);
   const [noteEditing, setNoteEditing] = React.useState('');
   const [todos, setTodos] = React.useState(() => {
-    return notes;
+    let savedNotes = JSON.parse(localStorage.getItem('notesArr')) || [];
+    return [...notes, ...savedNotes];
   });
   const [archivedTodos, setArchivedTodos] = React.useState([]);
   const [searching, setSearching] = React.useState('');
@@ -38,12 +39,13 @@ function App() {
   React.useEffect(() => {
     let savedNotes = localStorage.getItem('notesArr');
     if (savedNotes) {
-      setTodos(JSON.parse(localStorage.getItem('notesArr')));
+      setTodos([...notes, ...JSON.parse(savedNotes)]);
     }
   }, []);
 
   const updNotes = React.useCallback(() => {
-    localStorage.setItem('notesArr', JSON.stringify(todos));
+    const userNotes = todos.filter(todo => !notes.some(note => note.text === todo.text));
+    localStorage.setItem('notesArr', JSON.stringify(userNotes));
   }, [todos]);
 
   React.useEffect(() => {
@@ -214,13 +216,13 @@ function App() {
             <SearchInput searchText={setSearching} text={searching} />
 
             <Select
-  defaultValue={filterOption}
-  onChange={(selectedOption) => setFilterOption(selectedOption)}
-  options={options}
-  value={filterOption}
-  className="react-select-container"
-  classNamePrefix="react-select"
-/>
+              defaultValue={filterOption}
+              onChange={(selectedOption) => setFilterOption(selectedOption)}
+              options={options}
+              value={filterOption}
+              className="react-select-container"
+              classNamePrefix="react-select"
+            />
 
             <button className='change-scheme-btn' onClick={toggleDarkTheme}>
               {isDarkMode ? (
